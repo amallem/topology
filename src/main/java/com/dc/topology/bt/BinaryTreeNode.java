@@ -1,6 +1,6 @@
 package com.dc.topology.bt;
 
-import com.dc.topology.common.AbstractNode;
+import com.dc.topology.common.Ranking;
 
 import java.util.Comparator;
 import java.util.List;
@@ -8,7 +8,7 @@ import java.util.List;
 /**
  * Created by mallem on 1/16/17.
  */
-public class BinaryTreeNode extends AbstractNode<BinaryTreeNode> {
+public class BinaryTreeNode implements Ranking<BinaryTreeNode> {
 
     public List<BinaryTreeNode> merge(List<BinaryTreeNode> peerNeighbors) {
         return null;
