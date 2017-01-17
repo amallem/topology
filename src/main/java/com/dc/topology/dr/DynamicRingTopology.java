@@ -11,11 +11,11 @@ import java.util.List;
  */
 public class DynamicRingTopology extends AbstractTopology {
 
-    public List<Integer> radii;
+    public List<String> radii;
 
     public List<AbstractNode<DynamicRingNode>> nodes;
 
-    public DynamicRingTopology(int numNodes, int numNeighbors, List<Integer> radii) {
+    public DynamicRingTopology(int numNodes, int numNeighbors, List<String> radii) {
         this.numNeighbors = numNeighbors;
         this.numNodes = numNodes;
         this.radii = radii;
@@ -31,7 +31,7 @@ public class DynamicRingTopology extends AbstractTopology {
         double degree;
         for (int i = 0; i < numNodes; i++) {
             degree = 360 * (i / numNodes);
-            DynamicRingNode currNode = new DynamicRingNode(degree, radii.get(0));
+            DynamicRingNode currNode = new DynamicRingNode(degree, Integer.parseInt(radii.get(0)));
             nodes.add(new AbstractNode<>(currNode, numNeighbors));
         }
         for (int i = 0; i < numNodes; i++) {
@@ -70,6 +70,20 @@ public class DynamicRingTopology extends AbstractTopology {
         }
     }
 
+    /**
+     * Choose destNode as a random neighbor of currNode.
+     * Send peerList to destNode.
+     * Get peerList from destNode.
+     * Merge current and recvd peerList at currNode.
+     * Merge current and recvd peerlist at destNode.
+     */
+    private void performExchange(AbstractNode<DynamicRingNode> currNode) {
+        AbstractNode<DynamicRingNode> destNode = currNode.neighbors.get(rand.nextInt(numNeighbors));
+        List<AbstractNode<DynamicRingNode>> peerListFromDest = destNode.neighbors;
+        List<AbstractNode<DynamicRingNode>> peerListToDest = currNode.neighbors;
+        currNode.neighbors = currNode.mergeLists(peerListFromDest);
+        destNode.neighbors = destNode.mergeLists(peerListToDest);
+    }
 
     public void sumOfDistances() {
         for (int i = 0; i < numNodes; i++) {
