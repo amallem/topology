@@ -72,6 +72,7 @@ public class DynamicRingTopology extends AbstractTopology {
 
     /**
      * Choose destNode as a random neighbor of currNode.
+     * Add currNode to peerList being sent.
      * Send peerList to destNode.
      * Get peerList from destNode.
      * Merge current and recvd peerList at currNode.
@@ -81,6 +82,7 @@ public class DynamicRingTopology extends AbstractTopology {
         AbstractNode<DynamicRingNode> destNode = currNode.neighbors.get(rand.nextInt(numNeighbors));
         List<AbstractNode<DynamicRingNode>> peerListFromDest = destNode.neighbors;
         List<AbstractNode<DynamicRingNode>> peerListToDest = currNode.neighbors;
+        peerListToDest.add(currNode);
         currNode.neighbors = currNode.mergeLists(peerListFromDest);
         destNode.neighbors = destNode.mergeLists(peerListToDest);
     }

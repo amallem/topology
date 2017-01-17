@@ -3,6 +3,7 @@ package com.dc.topology.bt;
 import com.dc.topology.common.AbstractNode;
 import com.dc.topology.common.AbstractTopology;
 
+import java.util.ArrayList;
 import java.util.List;
 
 /**
@@ -19,7 +20,29 @@ public class BinaryTreeTopology extends AbstractTopology {
 
     //TODO : Not yet finalized.
     public void initialize() {
+        for (int i = 1; i <= numNodes; i++) {
+            nodes.add(new AbstractNode<>(new BinaryTreeNode(i), numNeighbors));
+        }
 
+        for (int i = 0; i < numNodes; i++) {
+            nodes.get(i).neighbors = generateNeighbors(numNeighbors);
+        }
+
+        sumOfDistances();
+    }
+
+    /**
+     * Initialization Phase.
+     * Neighbors maybe duplicate in the list.
+     * The same node may also end up in its neighbor list.
+     */
+    private List<AbstractNode<BinaryTreeNode>> generateNeighbors(int numNeighbors) {
+
+        List<AbstractNode<BinaryTreeNode>> newNodes = new ArrayList<>();
+        for (int i = 0; i < numNeighbors; i++) {
+            newNodes.add(nodes.get(rand.nextInt(numNodes)));
+        }
+        return newNodes;
     }
 
 
