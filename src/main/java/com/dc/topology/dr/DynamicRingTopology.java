@@ -4,18 +4,18 @@ import com.dc.topology.common.AbstractNode;
 import com.dc.topology.common.AbstractTopology;
 import com.dc.topology.common.Constants;
 
-import java.util.*;
+import java.util.ArrayList;
+import java.util.Iterator;
+import java.util.List;
 
 /**
  * Created by mallem on 1/16/17.
  */
-public class DynamicRingTopology extends AbstractTopology {
+public class DynamicRingTopology extends AbstractTopology<DynamicRingNode> {
 
     private int MAX_RADIUS;
 
-    public Iterator<String> radiusIter;
-
-    public List<AbstractNode<DynamicRingNode>> nodes;
+    private Iterator<String> radiusIter;
 
     public DynamicRingTopology(int numNodes, int numNeighbors, List<String> radii) {
         this.numNeighbors = numNeighbors;
@@ -45,28 +45,6 @@ public class DynamicRingTopology extends AbstractTopology {
     }
 
     /**
-     * Initialization Phase.
-     * Neighbors maybe duplicate in the list.
-     * The same node may also end up in its neighbor list.
-     * List of neighbors are unique for better convergence.
-     */
-    private List<AbstractNode<DynamicRingNode>> generateNeighbors(int numNeighbors) {
-
-        Set<Integer> chosenSet = new HashSet<>(numNeighbors);
-        List<AbstractNode<DynamicRingNode>> newNodes = new ArrayList<>();
-        for (int i = 0; i < numNeighbors; i++) {
-            int currNum = rand.nextInt(numNodes);
-            while (chosenSet.contains(currNum)) {
-                currNum = rand.nextInt(numNodes);
-            }
-            chosenSet.add(currNum);
-            newNodes.add(nodes.get(currNum));
-        }
-
-        return newNodes;
-    }
-
-    /**
      * Execution Phase.
      * Print sumOfDistances every 5 iterations.
      * Increase r value every 3 iterations.
@@ -84,32 +62,6 @@ public class DynamicRingTopology extends AbstractTopology {
                 sumOfDistances();
                 MAX_RADIUS = (radiusIter.hasNext()) ? Integer.parseInt(radiusIter.next()) : MAX_RADIUS;
             }
-        }
-    }
-
-    /**
-     * Choose destNode as a random neighbor of currNode.
-     * Add currNode to peerList being sent.
-     * Send peerList to destNode.
-     * Get peerList from destNode.
-     * Merge current and received peerList at currNode.
-     * Merge current and received peerList at destNode.
-     */
-    private void performExchange(AbstractNode<DynamicRingNode> currNode) {
-        AbstractNode<DynamicRingNode> destNode = currNode.neighbors.get(rand.nextInt(numNeighbors));
-        List<AbstractNode<DynamicRingNode>> peerListFromDest = destNode.neighbors;
-        List<AbstractNode<DynamicRingNode>> peerListToDest = currNode.neighbors;
-        peerListToDest.add(currNode);
-        currNode.neighbors = currNode.mergeLists(peerListFromDest);
-        destNode.neighbors = destNode.mergeLists(peerListToDest);
-    }
-
-    /**
-     * TODO: Needs to change.
-     */
-    public void sumOfDistances() {
-        for (int i = 0; i < numNodes; i++) {
-            System.out.println("Node " + i + " : " + nodes.get(i).sumOfDistances());
         }
     }
 }

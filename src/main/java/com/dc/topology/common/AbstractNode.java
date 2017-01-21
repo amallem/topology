@@ -7,13 +7,13 @@ import java.util.*;
  */
 public class AbstractNode<T extends Ranking<T>> {
 
-    public T node;
+    private T node;
 
-    public int numNeighbors;
+    private int numNeighbors;
 
     public List<AbstractNode<T>> neighbors;
 
-    public Comparator<AbstractNode<T>> rankingFunction;
+    private Comparator<AbstractNode<T>> rankingFunction;
 
     public AbstractNode(T node, int numNeighbors) {
         this.node = node;
