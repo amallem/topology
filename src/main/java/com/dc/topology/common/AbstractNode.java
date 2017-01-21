@@ -1,7 +1,6 @@
 package com.dc.topology.common;
 
-import java.util.Comparator;
-import java.util.List;
+import java.util.*;
 
 /**
  * Created by mallem on 1/16/17.
@@ -35,10 +34,25 @@ public class AbstractNode<T extends Ranking<T>> {
         };
     }
 
+    /**
+     * The returned list is unique.
+     * If numNeighbors > size of listA + size of listB then returned list has nodes < numNeighbors.
+     */
     public List<AbstractNode<T>> mergeLists(List<AbstractNode<T>> peerList) {
         neighbors.addAll(peerList);
         neighbors.sort(rankingFunction);
-        return neighbors.subList(0, Math.min(numNeighbors, neighbors.size()));
+
+        Set<AbstractNode<T>> chosenNodes = new HashSet<>();
+        List<AbstractNode<T>> finalList = new ArrayList<>();
+        Iterator<AbstractNode<T>> iter = neighbors.iterator();
+        while (finalList.size() < numNeighbors && iter.hasNext()) {
+            AbstractNode<T> currNode = iter.next();
+            if (!chosenNodes.contains(currNode)) {
+                finalList.add(currNode);
+                chosenNodes.add(currNode);
+            }
+        }
+        return finalList;
     }
 
     public double sumOfDistances() {

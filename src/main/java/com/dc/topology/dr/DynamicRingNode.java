@@ -1,5 +1,6 @@
 package com.dc.topology.dr;
 
+import com.dc.topology.common.Constants;
 import com.dc.topology.common.Ranking;
 
 /**
@@ -9,20 +10,16 @@ public class DynamicRingNode implements Ranking<DynamicRingNode> {
 
     public double angle;
 
-    public int radius;
-
-    public DynamicRingNode(double degree, int radius) {
+    public DynamicRingNode(double degree) {
         this.angle = Math.toRadians(degree);
-        this.radius = radius;
     }
 
     /**
-     * Returns the result of Square(x1-x2) - Square(y1-y2).
-     * TODO: Radius is not yet used.
+     * Returns the result of Math.sqrt(Square(x1-x2) - Square(y1-y2)).
      */
     public double getDistance(DynamicRingNode node) {
-        double xDiff = Math.cos(this.angle) - Math.cos(node.angle);
-        double yDiff = Math.sin(this.angle) - Math.sin(node.angle);
-        return ((xDiff * xDiff) - (yDiff * yDiff));
+        double xDiff = Constants.CURRENT_RADIUS * (Math.cos(this.angle) - Math.cos(node.angle));
+        double yDiff = Constants.CURRENT_RADIUS * (Math.sin(this.angle) - Math.sin(node.angle));
+        return Math.sqrt((xDiff * xDiff) + (yDiff * yDiff));
     }
 }
