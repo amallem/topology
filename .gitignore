@@ -3,7 +3,7 @@
 target/*
 .idea/*
 *.iml
-
+.DS_Store
 # Mobile Tools for Java (J2ME)
 .mtj.tmp/
 
@@ -14,3 +14,14 @@ target/*
 
 # virtual machine crash logs, see http://www.java.com/en/download/help/error_hotspot.xml
 hs_err_pid*
+.idea/
+src/.DS_Store
+src/main/.DS_Store
+src/main/java/.DS_Store
+src/main/java/com/.DS_Store
+src/main/java/com/dc/.DS_Store
+src/main/java/com/dc/topology/.DS_Store
+src/main/java/com/dc/topology/bt/.DS_Store
+src/main/resources/
+src/test/
+target/
