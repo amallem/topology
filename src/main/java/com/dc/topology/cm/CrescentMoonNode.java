@@ -7,7 +7,21 @@ import com.dc.topology.common.Distance;
  */
 public class CrescentMoonNode implements Distance<CrescentMoonNode> {
 
+    double xVal;
+
+    double yVal;
+
+    public CrescentMoonNode(double xVal, double yVal) {
+        this.xVal = xVal;
+        this.yVal = yVal;
+    }
+
+    /**
+     *
+     */
     public double getDistance(CrescentMoonNode node) {
-        return 0;
+        double xDiff = this.xVal - node.xVal;
+        double yDiff = this.yVal - node.yVal;
+        return Math.sqrt((xDiff * xDiff) + (yDiff * yDiff));
     }
 }

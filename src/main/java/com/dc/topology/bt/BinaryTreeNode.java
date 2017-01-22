@@ -14,6 +14,7 @@ public class BinaryTreeNode implements Distance<BinaryTreeNode> {
 
     int yVal;
 
+    //TODO: Scale factor final value?
     public BinaryTreeNode(int nodeValue, int xVal, int yVal) {
         this.nodeValue = nodeValue;
         this.xVal = Constants.SCALE_FACTOR * xVal;
