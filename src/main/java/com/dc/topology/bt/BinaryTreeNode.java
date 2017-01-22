@@ -1,5 +1,6 @@
 package com.dc.topology.bt;
 
+import com.dc.topology.common.Constants;
 import com.dc.topology.common.Distance;
 
 /**
@@ -9,8 +10,14 @@ public class BinaryTreeNode implements Distance<BinaryTreeNode> {
 
     int nodeValue;
 
-    public BinaryTreeNode(int nodeValue) {
+    int xVal;
+
+    int yVal;
+
+    public BinaryTreeNode(int nodeValue, int xVal, int yVal) {
         this.nodeValue = nodeValue;
+        this.xVal = Constants.SCALE_FACTOR * xVal;
+        this.yVal = Constants.SCALE_FACTOR * yVal;
     }
 
     /**

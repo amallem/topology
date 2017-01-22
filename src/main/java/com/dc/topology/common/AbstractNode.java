@@ -7,7 +7,7 @@ import java.util.*;
  */
 public class AbstractNode<T extends Distance<T>> {
 
-    private T node;
+    public T node;
 
     private int numNeighbors;
 

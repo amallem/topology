@@ -13,4 +13,6 @@ public class Constants {
 
     public static int CURRENT_RADIUS = 0;
 
+    public static final int SCALE_FACTOR = 20;
+
 }

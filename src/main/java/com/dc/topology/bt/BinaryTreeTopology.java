@@ -3,6 +3,7 @@ package com.dc.topology.bt;
 import com.dc.topology.common.AbstractNode;
 import com.dc.topology.common.AbstractTopology;
 
+import java.awt.*;
 import java.util.ArrayList;
 
 /**
@@ -14,12 +15,37 @@ public class BinaryTreeTopology extends AbstractTopology<BinaryTreeNode> {
         this.numNodes = numNodes;
         this.numNeighbors = numNeighbors;
         this.nodes = new ArrayList<>(numNodes);
+        setSize(1500, 1500);
     }
 
     //TODO : Not yet finalized.
     public void initialize() {
-        for (int i = 1; i <= numNodes; i++) {
-            nodes.add(new AbstractNode<>(i, new BinaryTreeNode(i), numNeighbors));
+        int curLevel = (int) (Math.log(numNodes + 1) / Math.log(2));
+        curLevel++;
+        int numNodesAtCurLevel = 1;
+        int nodeNumber = 1;
+
+        nodes.add(new AbstractNode<>(nodeNumber, new BinaryTreeNode(nodeNumber, 0, curLevel), numNeighbors));
+
+        nodeNumber++;
+        numNodesAtCurLevel *= 2;
+        curLevel--;
+
+        while (curLevel > 0) {
+            int leftSideNodeCount = numNodesAtCurLevel / 2;
+
+            for (int i = leftSideNodeCount; i > 0 && nodeNumber <= numNodes; i--) {
+                nodes.add(new AbstractNode<>(nodeNumber, new BinaryTreeNode(nodeNumber, -i, curLevel), numNeighbors));
+                nodeNumber++;
+            }
+
+            for (int i = 1; i <= leftSideNodeCount && nodeNumber <= numNodes; i++) {
+                nodes.add(new AbstractNode<>(nodeNumber, new BinaryTreeNode(nodeNumber, i, curLevel), numNeighbors));
+                nodeNumber++;
+            }
+
+            numNodesAtCurLevel *= 2;
+            curLevel--;
         }
 
         for (int i = 0; i < numNodes; i++) {
@@ -27,6 +53,7 @@ public class BinaryTreeTopology extends AbstractTopology<BinaryTreeNode> {
         }
 
         sumOfDistances();
+        setVisible(true);
     }
 
     /**
@@ -43,10 +70,22 @@ public class BinaryTreeTopology extends AbstractTopology<BinaryTreeNode> {
             if (i % 5 == 0)
                 sumOfDistances();
         }
+        System.out.println("Execute finished");
+        repaint();
     }
 
     @Override
-    public void plotGraph() {
-
+    public void paint(Graphics g) {
+        Graphics2D g2d = (Graphics2D) g;
+        g2d.setColor(Color.BLUE);
+        Font font = new Font("Serif", Font.PLAIN, 24);
+        g2d.setFont(font);
+        g2d.translate(500, 500);
+        g2d.scale(1.0, -1.0);
+        for (AbstractNode<BinaryTreeNode> node : nodes) {
+            for (AbstractNode<BinaryTreeNode> neighbor : node.neighbors) {
+                g.drawLine(node.node.xVal, node.node.yVal, neighbor.node.xVal, neighbor.node.yVal);
+            }
+        }
     }
 }

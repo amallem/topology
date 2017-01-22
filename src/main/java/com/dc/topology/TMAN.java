@@ -3,6 +3,7 @@ package com.dc.topology;
 import com.dc.topology.bt.BinaryTreeTopology;
 import com.dc.topology.cm.CrescentMoonTopology;
 import com.dc.topology.common.AbstractTopology;
+import com.dc.topology.common.Constants;
 import com.dc.topology.dr.DynamicRingTopology;
 
 import java.util.Arrays;
@@ -44,9 +45,10 @@ public class TMAN {
                 break;
         }
 
+        //topology.setVisible(true);
         topology.initialize();
-        // topology.execute(Constants.Iterations);
-        topology.plotGraph();
+        topology.execute(Constants.Iterations);
+        //topology.plotGraph();
 
     }
 }

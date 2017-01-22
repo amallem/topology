@@ -3,11 +3,8 @@ package com.dc.topology.dr;
 import com.dc.topology.common.AbstractNode;
 import com.dc.topology.common.AbstractTopology;
 import com.dc.topology.common.Constants;
-import org.graphstream.graph.Node;
-import org.graphstream.graph.implementations.AdjacencyListGraph;
-import org.graphstream.stream.file.FileSinkImages;
 
-import java.io.IOException;
+import java.awt.*;
 import java.util.ArrayList;
 import java.util.Iterator;
 import java.util.List;
@@ -27,6 +24,8 @@ public class DynamicRingTopology extends AbstractTopology<DynamicRingNode> {
         radiusIter = radii.iterator();
         this.MAX_RADIUS = Integer.parseInt(radiusIter.next());
         this.nodes = new ArrayList<>(numNodes);
+        setSize(1500, 1500);
+
     }
 
     /**
@@ -46,6 +45,9 @@ public class DynamicRingTopology extends AbstractTopology<DynamicRingNode> {
             nodes.get(i).neighbors = generateNeighbors(numNeighbors);
         }
         sumOfDistances();
+        setVisible(true);
+
+
     }
 
     /**
@@ -66,30 +68,34 @@ public class DynamicRingTopology extends AbstractTopology<DynamicRingNode> {
                 sumOfDistances();
                 MAX_RADIUS = (radiusIter.hasNext()) ? Integer.parseInt(radiusIter.next()) : MAX_RADIUS;
             }
+            repaint();
         }
+
     }
 
-    public void plotGraph() {
-        AdjacencyListGraph graph = new AdjacencyListGraph("Dynamic Ring Graph", false, true);
+    @Override
+    public void paint(Graphics g) {
 
-        FileSinkImages pic = new FileSinkImages(FileSinkImages.OutputType.png, FileSinkImages.Resolutions.HD720);
-        pic.setLayoutPolicy(FileSinkImages.LayoutPolicy.COMPUTED_FULLY_AT_NEW_IMAGE);
-
+        g.setColor(Color.BLUE);
+        Font font = new Font("Serif", Font.PLAIN, 24);
+        g.setFont(font);
+        g.translate(500, 500);
         for (AbstractNode<DynamicRingNode> node : nodes) {
-            Node currNode = graph.getNode(node.id);
-            if (currNode != null) {
-                graph.addNode(node.id);
-            }
             for (AbstractNode<DynamicRingNode> neighbor : node.neighbors) {
-                graph.addEdge(node.id + neighbor.id, node.id, neighbor.id);
+                g.drawLine(getXval(node), getYval(node), getXval(neighbor), getYval(neighbor));
             }
-        }
-
-        try {
-            pic.writeAll(graph, "sample.png");
-        } catch (IOException e) {
-            System.out.println("Could not create image");
-            e.printStackTrace();
         }
     }
+
+    private int getXval(AbstractNode<DynamicRingNode> aNode) {
+
+        return (int) (Constants.SCALE_FACTOR * Constants.CURRENT_RADIUS * Math.cos(aNode.node.angle));
+    }
+
+    private int getYval(AbstractNode<DynamicRingNode> aNode) {
+
+        return (int) (Constants.SCALE_FACTOR * Constants.CURRENT_RADIUS * Math.sin(aNode.node.angle));
+    }
+
+
 }

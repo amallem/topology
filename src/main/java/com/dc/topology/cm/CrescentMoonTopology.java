@@ -32,9 +32,4 @@ public class CrescentMoonTopology extends AbstractTopology<CrescentMoonNode> {
             sumOfDistances();
         }
     }
-
-    @Override
-    public void plotGraph() {
-
-    }
 }
