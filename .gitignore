@@ -1,7 +1,5 @@
 *.class
 
-target/*
-.idea/*
 *.iml
 .DS_Store
 # Mobile Tools for Java (J2ME)
@@ -22,6 +20,4 @@ src/main/java/com/.DS_Store
 src/main/java/com/dc/.DS_Store
 src/main/java/com/dc/topology/.DS_Store
 src/main/java/com/dc/topology/bt/.DS_Store
-src/main/resources/
-src/test/
 target/

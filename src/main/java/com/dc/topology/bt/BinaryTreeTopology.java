@@ -19,7 +19,7 @@ public class BinaryTreeTopology extends AbstractTopology<BinaryTreeNode> {
     //TODO : Not yet finalized.
     public void initialize() {
         for (int i = 1; i <= numNodes; i++) {
-            nodes.add(new AbstractNode<>(new BinaryTreeNode(i), numNeighbors));
+            nodes.add(new AbstractNode<>(i, new BinaryTreeNode(i), numNeighbors));
         }
 
         for (int i = 0; i < numNodes; i++) {
@@ -43,5 +43,10 @@ public class BinaryTreeTopology extends AbstractTopology<BinaryTreeNode> {
             if (i % 5 == 0)
                 sumOfDistances();
         }
+    }
+
+    @Override
+    public void plotGraph() {
+
     }
 }

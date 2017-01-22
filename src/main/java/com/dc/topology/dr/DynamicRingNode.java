@@ -1,12 +1,12 @@
 package com.dc.topology.dr;
 
 import com.dc.topology.common.Constants;
-import com.dc.topology.common.Ranking;
+import com.dc.topology.common.Distance;
 
 /**
  * Created by mallem on 1/16/17.
  */
-public class DynamicRingNode implements Ranking<DynamicRingNode> {
+public class DynamicRingNode implements Distance<DynamicRingNode> {
 
     public double angle;
 

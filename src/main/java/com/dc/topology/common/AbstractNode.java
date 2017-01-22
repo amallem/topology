@@ -5,17 +5,20 @@ import java.util.*;
 /**
  * Created by mallem on 1/16/17.
  */
-public class AbstractNode<T extends Ranking<T>> {
+public class AbstractNode<T extends Distance<T>> {
 
     private T node;
 
     private int numNeighbors;
 
+    public String id;
+
     public List<AbstractNode<T>> neighbors;
 
     private Comparator<AbstractNode<T>> rankingFunction;
 
-    public AbstractNode(T node, int numNeighbors) {
+    public AbstractNode(int id, T node, int numNeighbors) {
+        this.id = "" + id;
         this.node = node;
         this.numNeighbors = numNeighbors;
         this.rankingFunction = createRankingFunction();

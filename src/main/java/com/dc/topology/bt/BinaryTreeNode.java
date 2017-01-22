@@ -1,11 +1,11 @@
 package com.dc.topology.bt;
 
-import com.dc.topology.common.Ranking;
+import com.dc.topology.common.Distance;
 
 /**
  * Created by mallem on 1/16/17.
  */
-public class BinaryTreeNode implements Ranking<BinaryTreeNode> {
+public class BinaryTreeNode implements Distance<BinaryTreeNode> {
 
     int nodeValue;
 

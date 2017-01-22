@@ -5,7 +5,7 @@ import java.util.*;
 /**
  * Created by mallem on 1/16/17.
  */
-public abstract class AbstractTopology<T extends Ranking<T>> {
+public abstract class AbstractTopology<T extends Distance<T>> {
 
     protected List<AbstractNode<T>> nodes;
 
@@ -18,6 +18,8 @@ public abstract class AbstractTopology<T extends Ranking<T>> {
     public abstract void initialize();
 
     public abstract void execute(int numIterations);
+
+    public abstract void plotGraph();
 
     protected List<AbstractNode<T>> generateNeighbors(int numNeighbors) {
 
