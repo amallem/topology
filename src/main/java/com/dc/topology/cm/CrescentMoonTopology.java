@@ -3,7 +3,6 @@ package com.dc.topology.cm;
 import com.dc.topology.common.AbstractNode;
 import com.dc.topology.common.AbstractTopology;
 
-import java.awt.*;
 import java.util.ArrayList;
 
 /**
@@ -11,15 +10,14 @@ import java.util.ArrayList;
  */
 public class CrescentMoonTopology extends AbstractTopology<CrescentMoonNode> {
 
-    final int innerRadius = 150;
+    private final int innerRadius = 150;
 
-    final double ratio = 3.0 / 13.0;
+    private final double ratio = 3.0 / 13.0;
 
     public CrescentMoonTopology(int numNodes, int numNeighbors) {
         this.numNodes = numNodes;
         this.numNeighbors = numNeighbors;
         this.nodes = new ArrayList<>(numNodes);
-        setSize(5000, 5000);
     }
 
     //TODO: Similar to Dynamic Ring?
@@ -43,35 +41,18 @@ public class CrescentMoonTopology extends AbstractTopology<CrescentMoonNode> {
         for (int i = 0; i < numNodes; i++) {
             nodes.get(i).neighbors = generateNeighbors(numNeighbors);
         }
-        sumOfDistances();
-        setVisible(true);
-    }
-
-    /**
-     * Execution Phase.
-     * TODO
-     */
-    public void execute(int numIterations) {
-        for (int i = 0; i < numIterations; i++) {
-            for (int j = 0; j < numNodes; j++) {
-                performExchange(nodes.get(j));
-            }
-            sumOfDistances();
-        }
+        sumOfDistances(0);
+        printNeighboursToFile(1);
+        printGraphicToFile(1);
     }
 
     @Override
-    public void paint(Graphics g) {
-        Graphics2D g2d = (Graphics2D) g;
-        g2d.setColor(Color.BLUE);
-        Font font = new Font("Serif", Font.PLAIN, 24);
-        g2d.setFont(font);
-        g2d.translate(400, 350);
-        g2d.scale(1.0, -1.0);
-        for (AbstractNode<CrescentMoonNode> node : nodes) {
-            for (AbstractNode<CrescentMoonNode> neighbor : node.neighbors) {
-                g.drawLine((int) node.node.xVal, (int) node.node.yVal, (int) neighbor.node.xVal, (int) neighbor.node.yVal);
-            }
-        }
+    protected int getY(AbstractNode<CrescentMoonNode> aNode) {
+        return (int) aNode.node.yVal;
+    }
+
+    @Override
+    protected int getX(AbstractNode<CrescentMoonNode> aNode) {
+        return (int) aNode.node.xVal;
     }
 }

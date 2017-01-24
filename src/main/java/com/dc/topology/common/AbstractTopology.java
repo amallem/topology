@@ -1,18 +1,17 @@
 package com.dc.topology.common;
 
-import org.graphstream.graph.Node;
-import org.graphstream.graph.implementations.AdjacencyListGraph;
-import org.graphstream.stream.file.FileSinkImages;
 
+import javax.imageio.ImageIO;
 import java.awt.*;
-import java.io.IOException;
+import java.awt.image.BufferedImage;
+import java.io.*;
 import java.util.*;
 import java.util.List;
 
 /**
  * Created by mallem on 1/16/17.
  */
-public abstract class AbstractTopology<T extends Distance<T>> extends Frame {
+public abstract class AbstractTopology<T extends Distance<T>> {
 
     protected List<AbstractNode<T>> nodes;
 
@@ -22,13 +21,22 @@ public abstract class AbstractTopology<T extends Distance<T>> extends Frame {
 
     private Random rand = new Random();
 
+    protected String TOPOLOGY_ID;
+
     public abstract void initialize();
 
-    public abstract void execute(int numIterations);
-
-    //public abstract void plotGraph();
-
-    // public abstract void plotGraph();
+    public void execute(int numIterations) {
+        for (int i = 0; i < numIterations; i++) {
+            for (int j = 0; j < numNodes; j++) {
+                performExchange(nodes.get(j));
+            }
+            if (i % 5 == 0) {
+                sumOfDistances(i);
+                printNeighboursToFile(i);
+                printGraphicToFile(i);
+            }
+        }
+    }
 
     protected List<AbstractNode<T>> generateNeighbors(int numNeighbors) {
 
@@ -53,7 +61,7 @@ public abstract class AbstractTopology<T extends Distance<T>> extends Frame {
      * Merge current and recvd peerList at currNode.
      * Merge current and recvd peerlist at destNode.
      */
-    public void performExchange(AbstractNode<T> currNode) {
+    protected void performExchange(AbstractNode<T> currNode) {
         AbstractNode<T> destNode = currNode.neighbors.get(rand.nextInt(numNeighbors));
         List<AbstractNode<T>> peerListFromDest = destNode.neighbors;
         List<AbstractNode<T>> peerListToDest = currNode.neighbors;
@@ -61,34 +69,66 @@ public abstract class AbstractTopology<T extends Distance<T>> extends Frame {
         destNode.neighbors = destNode.mergeLists(peerListToDest);
     }
 
-    public void sumOfDistances() {
+    protected void sumOfDistances(int cycleNum) {
+        double totDistance = 0.0;
         for (int i = 0; i < numNodes; i++) {
-            System.out.println("Node " + i + " : " + nodes.get(i).sumOfDistances());
+            totDistance += nodes.get(i).sumOfDistances();
+        }
+
+        System.out.println(cycleNum + " : " + totDistance);
+
+        String fileName = TOPOLOGY_ID + "_N" + numNodes + "_K" + numNeighbors + ".txt";
+        try (FileWriter fw = new FileWriter(fileName, true);
+             BufferedWriter bw = new BufferedWriter(fw);
+             PrintWriter out = new PrintWriter(bw)) {
+            out.println(cycleNum + " " + totDistance);
+        } catch (IOException e) {
+            System.out.println("Unable to create File : " + fileName);
+        }
+
+    }
+
+    protected void printNeighboursToFile(int iterCount) {
+        String fileName = TOPOLOGY_ID + "_N" + numNodes + "_K" + numNeighbors + "_" + iterCount + ".txt";
+        try (FileWriter fw = new FileWriter(fileName, true);
+             BufferedWriter bw = new BufferedWriter(fw);
+             PrintWriter out = new PrintWriter(bw)) {
+            for (AbstractNode<T> node : nodes) {
+                out.print(node.id + " -> ");
+                for (AbstractNode<T> neighbor : node.neighbors) {
+                    out.print(neighbor.id + ", ");
+                }
+                out.println();
+            }
+        } catch (IOException e) {
+            System.out.println("Unable to create File : " + fileName);
         }
     }
 
-    public void plotGraphs() {
-        AdjacencyListGraph graph = new AdjacencyListGraph("Dynamic Ring Graph", false, true);
-
-        FileSinkImages pic = new FileSinkImages(FileSinkImages.OutputType.png, FileSinkImages.Resolutions.HD720);
-        pic.setLayoutPolicy(FileSinkImages.LayoutPolicy.COMPUTED_FULLY_AT_NEW_IMAGE);
+    protected void printGraphicToFile(int iterCount) {
+        String fileName = TOPOLOGY_ID + "_N" + numNodes + "_K" + numNeighbors + "_" + iterCount + ".png";
+        BufferedImage img = new BufferedImage(20000, 15000, BufferedImage.TYPE_INT_ARGB);
+        Graphics2D g2d = img.createGraphics();
+        g2d.setColor(Color.BLUE);
+        g2d.scale(1.0, -1.0);
+        Font font = new Font("Serif", Font.PLAIN, 24);
+        g2d.setFont(font);
+        g2d.translate(10000, -14500);
 
         for (AbstractNode<T> node : nodes) {
-            Node currNode = graph.getNode(node.id);
-            if (currNode != null) {
-                graph.addNode(node.id);
-            }
             for (AbstractNode<T> neighbor : node.neighbors) {
-                graph.addEdge(node.id + neighbor.id, node.id, neighbor.id);
+                g2d.drawLine(getX(node), getY(node), getX(neighbor), getY(neighbor));
             }
         }
 
         try {
-            pic.writeAll(graph, "sample.png");
+            ImageIO.write(img, "PNG", new File(fileName));
         } catch (IOException e) {
-            System.out.println("Could not create image");
-            e.printStackTrace();
+            System.out.println("Exception during image creation occurred");
         }
     }
 
+    protected abstract int getY(AbstractNode<T> node);
+
+    protected abstract int getX(AbstractNode<T> node);
 }

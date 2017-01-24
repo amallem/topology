@@ -4,7 +4,6 @@ import com.dc.topology.common.AbstractNode;
 import com.dc.topology.common.AbstractTopology;
 import com.dc.topology.common.Constants;
 
-import java.awt.*;
 import java.util.ArrayList;
 import java.util.Iterator;
 import java.util.List;
@@ -24,7 +23,7 @@ public class DynamicRingTopology extends AbstractTopology<DynamicRingNode> {
         radiusIter = radii.iterator();
         this.MAX_RADIUS = Integer.parseInt(radiusIter.next());
         this.nodes = new ArrayList<>(numNodes);
-        setSize(1500, 1500);
+        this.TOPOLOGY_ID = "D";
 
     }
 
@@ -44,10 +43,9 @@ public class DynamicRingTopology extends AbstractTopology<DynamicRingNode> {
         for (int i = 0; i < numNodes; i++) {
             nodes.get(i).neighbors = generateNeighbors(numNeighbors);
         }
-        sumOfDistances();
-        setVisible(true);
-
-
+        sumOfDistances(0);
+        printNeighboursToFile(1);
+        printGraphicToFile(1);
     }
 
     /**
@@ -56,6 +54,7 @@ public class DynamicRingTopology extends AbstractTopology<DynamicRingNode> {
      * Increase r value every 3 iterations.
      * Re-Read r value every 5 iterations.
      */
+    @Override
     public void execute(int numIterations) {
         for (int i = 1; i <= numIterations; i++) {
             if (i % Constants.RADIUS_INC == 0 && Constants.CURRENT_RADIUS < MAX_RADIUS) {
@@ -65,34 +64,22 @@ public class DynamicRingTopology extends AbstractTopology<DynamicRingNode> {
                 performExchange(nodes.get(j));
             }
             if (i % Constants.RADIUS_READ == 0) {
-                sumOfDistances();
+                sumOfDistances(i);
                 MAX_RADIUS = (radiusIter.hasNext()) ? Integer.parseInt(radiusIter.next()) : MAX_RADIUS;
+                printNeighboursToFile(i);
+                printGraphicToFile(i);
             }
-            repaint();
+
         }
 
     }
 
-    @Override
-    public void paint(Graphics g) {
-
-        g.setColor(Color.BLUE);
-        Font font = new Font("Serif", Font.PLAIN, 24);
-        g.setFont(font);
-        g.translate(500, 500);
-        for (AbstractNode<DynamicRingNode> node : nodes) {
-            for (AbstractNode<DynamicRingNode> neighbor : node.neighbors) {
-                g.drawLine(getXval(node), getYval(node), getXval(neighbor), getYval(neighbor));
-            }
-        }
-    }
-
-    private int getXval(AbstractNode<DynamicRingNode> aNode) {
+    protected int getX(AbstractNode<DynamicRingNode> aNode) {
 
         return (int) (Constants.SCALE_FACTOR * Constants.CURRENT_RADIUS * Math.cos(aNode.node.angle));
     }
 
-    private int getYval(AbstractNode<DynamicRingNode> aNode) {
+    protected int getY(AbstractNode<DynamicRingNode> aNode) {
 
         return (int) (Constants.SCALE_FACTOR * Constants.CURRENT_RADIUS * Math.sin(aNode.node.angle));
     }
