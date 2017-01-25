@@ -2,6 +2,7 @@ package com.dc.topology.bt;
 
 import com.dc.topology.common.AbstractNode;
 import com.dc.topology.common.AbstractTopology;
+import com.dc.topology.common.Constants;
 
 import java.util.ArrayList;
 
@@ -15,6 +16,9 @@ public class BinaryTreeTopology extends AbstractTopology<BinaryTreeNode> {
         this.numNeighbors = numNeighbors;
         this.nodes = new ArrayList<>(numNodes);
         this.TOPOLOGY_ID = "B";
+        this.origin_x = 3000;
+        this.origin_y = -5500;
+        this.image_dim = Constants.B_IMAGE_DIMENSION;
     }
 
     //TODO : Not yet finalized.
@@ -58,12 +62,12 @@ public class BinaryTreeTopology extends AbstractTopology<BinaryTreeNode> {
 
     @Override
     protected int getY(AbstractNode<BinaryTreeNode> aNode) {
-        return 1000 * aNode.node.yVal;
+        return 500 * aNode.node.yVal;
     }
 
     @Override
     protected int getX(AbstractNode<BinaryTreeNode> aNode) {
-        return 20 * aNode.node.xVal;
+        return 10 * aNode.node.xVal;
     }
 
 

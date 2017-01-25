@@ -2,6 +2,7 @@ package com.dc.topology.cm;
 
 import com.dc.topology.common.AbstractNode;
 import com.dc.topology.common.AbstractTopology;
+import com.dc.topology.common.Constants;
 
 import java.util.ArrayList;
 
@@ -18,6 +19,9 @@ public class CrescentMoonTopology extends AbstractTopology<CrescentMoonNode> {
         this.numNodes = numNodes;
         this.numNeighbors = numNeighbors;
         this.nodes = new ArrayList<>(numNodes);
+        this.origin_x = 0;
+        this.origin_y = 0;
+        this.image_dim = Constants.C_IMAGE_DIMENSION;
     }
 
     //TODO: Similar to Dynamic Ring?

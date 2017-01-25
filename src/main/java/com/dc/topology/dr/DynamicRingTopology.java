@@ -24,7 +24,9 @@ public class DynamicRingTopology extends AbstractTopology<DynamicRingNode> {
         this.MAX_RADIUS = Integer.parseInt(radiusIter.next());
         this.nodes = new ArrayList<>(numNodes);
         this.TOPOLOGY_ID = "D";
-
+        this.origin_x = 3000;
+        this.origin_y = -3000;
+        this.image_dim = Constants.D_IMAGE_DIMENSION;
     }
 
     /**
@@ -71,6 +73,7 @@ public class DynamicRingTopology extends AbstractTopology<DynamicRingNode> {
             }
 
         }
+        createDistanceChart();
 
     }
 

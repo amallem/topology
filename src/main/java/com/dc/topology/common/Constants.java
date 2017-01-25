@@ -13,6 +13,12 @@ public class Constants {
 
     public static int CURRENT_RADIUS = 0;
 
-    public static final int SCALE_FACTOR = 20;
+    public static final int SCALE_FACTOR = 250;
+
+    public static final int D_IMAGE_DIMENSION = 6000;
+
+    public static final int B_IMAGE_DIMENSION = 6000;
+
+    public static final int C_IMAGE_DIMENSION = 6000;
 
 }
