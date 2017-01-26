@@ -1,5 +1,6 @@
 package com.dc.topology.cm;
 
+import com.dc.topology.common.Constants;
 import com.dc.topology.common.Distance;
 
 /**
@@ -20,8 +21,26 @@ public class CrescentMoonNode implements Distance<CrescentMoonNode> {
      *
      */
     public double getDistance(CrescentMoonNode node) {
-        double xDiff = this.xVal - node.xVal;
-        double yDiff = this.yVal - node.yVal;
-        return Math.sqrt((xDiff * xDiff) + (yDiff * yDiff));
+        double aX = 0;
+        double aY = Constants.CM_INNER_RADIUS;
+
+        double bX = 0;
+        double bY = -1 * Constants.CM_INNER_RADIUS;
+
+        double distanceBetweenPoints = getDistanceUtil(this.xVal, this.yVal, node.xVal, node.yVal);
+
+        double distanceFromA = getDistanceUtil(aX, aY, node.xVal, node.yVal);
+
+        double distanceFromB = getDistanceUtil(bX, bY, node.xVal, node.yVal);
+
+
+        return distanceBetweenPoints*2 + distanceFromA + distanceFromB;
+//        double xDiff = this.xVal - node.xVal;
+//        double yDiff = this.yVal - node.yVal;
+//        return Math.sqrt((xDiff * xDiff) + (yDiff * yDiff));
+    }
+
+    private double getDistanceUtil(double ax, double ay, double bx, double by){
+        return Math.sqrt((Math.pow(ax-bx, 2)) + (Math.pow(ay-by, 2)));
     }
 }
