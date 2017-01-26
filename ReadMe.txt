@@ -1,5 +1,3 @@
-# topology
-Topology Management in P2P Systems
 Language - Java 8
 
 Code Structure
