@@ -21,4 +21,7 @@ public class Constants {
 
     public static final int C_IMAGE_DIMENSION = 6000;
 
+    public static final int CM_INNER_RADIUS = 1500;
+    public static final int CM_OUTER_RADIUS = 2560;
+
 }

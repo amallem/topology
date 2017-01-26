@@ -11,20 +11,21 @@ import java.util.ArrayList;
  */
 public class CrescentMoonTopology extends AbstractTopology<CrescentMoonNode> {
 
-    private final int innerRadius = 150;
+    private final int innerRadius = Constants.CM_INNER_RADIUS;
 
-    private final double ratio = 3.0 / 13.0;
+    private final int outerRadius = Constants.CM_OUTER_RADIUS;
+
+    private final double ratio = 2.0 / 3.0;
 
     public CrescentMoonTopology(int numNodes, int numNeighbors) {
         this.numNodes = numNodes;
         this.numNeighbors = numNeighbors;
         this.nodes = new ArrayList<>(numNodes);
-        this.origin_x = 0;
-        this.origin_y = 0;
+        this.origin_x = 3000;
+        this.origin_y = -3000;
         this.image_dim = Constants.C_IMAGE_DIMENSION;
     }
 
-    //TODO: Similar to Dynamic Ring?
     public void initialize() {
         int smallCircleNodes = (int) (numNodes * ratio);
         double degree;
@@ -35,10 +36,12 @@ public class CrescentMoonTopology extends AbstractTopology<CrescentMoonNode> {
             nodes.add(new AbstractNode<>(i, currNode, numNeighbors));
         }
 
+        Double outerCenter = Math.sqrt(outerRadius*outerRadius - innerRadius*innerRadius);
+
         for (int i = 0; i < (numNodes - smallCircleNodes); i++) {
-            degree = 30 + (300 * ((double) i / (double) (numNodes - smallCircleNodes)));
-            CrescentMoonNode currNode = new CrescentMoonNode((Math.sqrt(3) * innerRadius * -1) + 2 * innerRadius * Math.cos(Math.toRadians(degree)),
-                    2 * innerRadius * Math.sin(Math.toRadians(degree)));
+            degree = 150 + (60 * ((double) i / (double) (numNodes - smallCircleNodes)));
+            CrescentMoonNode currNode = new CrescentMoonNode(outerCenter + outerRadius * Math.cos(Math.toRadians(degree)),
+                    outerRadius * Math.sin(Math.toRadians(degree)));
             nodes.add(new AbstractNode<>(i, currNode, numNeighbors));
         }
 
